@@ -1,37 +1,37 @@
 from collections import deque
 
-M, N = map(int, input().split())
+def bfs():
+    q = deque()
+    visited = [[[0]*M for _ in range(N)] for _ in range(H)]
 
-tomato = []
-for _ in range(N):
-    tomato.append(list(map(int, input().split())))
-queue = deque()
-for i in range(N):
-    for j in range(M):
-        if tomato[i][j] == 1:
-            queue.append((i, j))
+    cnt = 0
+    for h in range(H):
+        for i in range(N):
+            for j in range(M):
+                if tomatos[h][i][j] == 1:
+                    q.append((h, i, j))
+                    visited[h][i][j] = 1
+                elif tomatos[h][i][j] == 0:
+                    cnt += 1
+    while q:
+        z, x, y = q.popleft()
+        for k in range(6):
+            nx = x + dx[k]
+            ny = y + dy[k]
+            nz = z + dz[k]
+            if 0 <= nx < N and 0 <= ny < M and 0 <= nz < H and visited[nz][nx][ny] == 0 and tomatos[nz][nx][ny] == 0:
+                q.append((nz, nx, ny))
+                visited[nz][nx][ny] = visited[z][x][y] + 1
+                cnt -= 1
+    if cnt == 0:
+        return visited[z][x][y] - 1
+    else:
+        return -1
 
-dx = [-1, 0, 1, 0]
-dy = [0, -1, 0, 1]
-while queue:
-    x, y = queue.popleft()
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < N and 0 <= ny < M:
-            if tomato[nx][ny] == -1:
-                continue
-            if tomato[nx][ny] == 0:
-                queue.append((nx, ny))
-                tomato[nx][ny] = tomato[x][y] + 1
+M, N, H = map(int, input().split())
+tomatos = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
+dx = [0, 0, 1, -1, 0, 0]
+dy = [1, -1, 0, 0, 0, 0]
+dz = [0, 0, 0, 0, 1, -1]
+print(bfs())
 
-all = False
-for i in range(N):
-    for j in range(M):
-        if tomato[i][j] == 0:
-            all = True
-            break
-if all:
-    print(-1)
-else:
-    print(max(map(max, tomato))-1)
