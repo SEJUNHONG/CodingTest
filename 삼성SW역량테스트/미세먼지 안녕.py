@@ -8,7 +8,7 @@ dx = [0, 0, -1, 1]
 dy = [-1, 1, 0, 0]
 
 for i in range(R):
-    if jido[i][0] != -1:
+    if jido[i][0] == -1:
         x1, x2 = i, i+1
         jido[x1][0] = jido[x2][0] = 0
         break
